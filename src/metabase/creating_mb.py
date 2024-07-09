@@ -16,12 +16,13 @@ catDat_new = catDat_new[columns]
 catDat = pd.read_csv('/home/seidi/Repositories/prox_graph_auto_config/data/nmslib/all_results_preProcessed_v2.csv')
 catDat = catDat[columns]
 catDat = pd.concat([catDat_old, catDat, catDat_new])
-catDat.reset_index(drop=True, inplace=True)
+catDat.reset_index(drop=True, inplace=True)   #丢弃索引  对该对象的操作在原对象上直接生效，不会返回新对象
 
 
 metafeatures = pd.read_csv('data/metafeatures/new_metafeatures_pp_v3.csv')
-metafeatures = metafeatures.rename(columns={'Unnamed: 0': 'base'})
+metafeatures = metafeatures.rename(columns={'Unnamed: 0': 'base'})  #将DataFrame中的列标签 ‘Unnamed: 0’ 更改为 ‘base’
 metafeatures[metafeatures.base == 'sift'].nr_inst.max()
+
 # metafeatures.base = metafeatures.base.apply(lambda x: 'fashion' if x.startswith('fashion') else x)
 # metafeatures.base = metafeatures.base.apply(lambda x: 'mnist121d' if x.startswith('mnist_121') else x)
 # metafeatures.dropna(axis=1, inplace=True)
@@ -62,7 +63,7 @@ metafeatures['nr_attr'] = metafeatures['nr_attr'].astype(int)
 metafeatures.rename(columns={'nr_inst': 'NumData'}, inplace=True)
 metafeatures.set_index(['base', 'NumData'], inplace=True)
 new_df2 = catDat.join(metafeatures, how='outer')
-new_df2.dropna(axis=0, inplace=True)
+new_df2.dropna(axis=0, inplace=True)   #用于去除 DataFrame 中包含缺失值（NaN）的行或列。在这里，axis=0 表示去除包含缺失值的行
 new_df2.reset_index(inplace=True)
 
 new_df2.rename(columns={
@@ -80,5 +81,6 @@ new_df2.graph_type = new_df2.graph_type.apply(
 new_df2.graph_type = new_df2.graph_type.apply(
     lambda x: 2 if x == 'Brute-kNNG' else x)
 
-new_df2.base.unique()
+new_df2.base.unique()                           #获取 DataFrame new_df2 中名为 “base” 的列中所有的唯一数值
 new_df2.to_csv('data/metabase/metabase_v3.csv', index=False)
+

@@ -33,7 +33,7 @@ def read_data(data_path):
 
     df = df.astype(float)
     others = ['QueryTime', 'DistComp']
-
+    
     df.loc[:, others] = df[others].apply(np.log)
     return df
 
@@ -240,3 +240,4 @@ if __name__ == "__main__":
             RESULTS.to_csv('data/results/info_sys_interpolated/adbis/predictions1.csv', index=False)
             del(scores)
             del(res)
+        
